@@ -1,7 +1,7 @@
-version: "3.9"
 name: learning-aws
 
 services:
+
   app:
     build: .
     container_name: hello-learning-aws
@@ -11,3 +11,25 @@ services:
 
     env_file:
       - .env
+
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:17
+
+    container_name: postgres
+
+    environment:
+      POSTGRES_DB: nodejs_demo
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Hoangth89
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:
