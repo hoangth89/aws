@@ -52,6 +52,31 @@ async function findAll() {
     return result.rows;
 }
 
+async function update(id, product) {
+
+    const { name, price, imageUrl } = product;
+
+    const result = await pool.query(
+        `
+        UPDATE products
+        SET
+            name = $1,
+            price = $2,
+            image_url = $3
+        WHERE id = $4
+        RETURNING *;
+        `,
+        [
+            name,
+            price,
+            imageUrl,
+            id
+        ]
+    );
+
+    return result.rows[0];
+}
+
 module.exports = {
     findAll,
     create
