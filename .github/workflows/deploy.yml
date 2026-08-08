@@ -1,0 +1,28 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            docker pull ghcr.io/hoangth89/aws:latest
+
+            docker stop hello-learning-aws || true
+            docker rm hello-learning-aws || true
+
+            docker run -d \
+              --name hello-learning-aws \
+              -p 3000:3000 \
+              ghcr.io/hoangth89/aws:latest
+
+            docker ps
