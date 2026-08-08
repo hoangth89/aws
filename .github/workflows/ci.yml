@@ -35,7 +35,12 @@ jobs:
         run: npm install
 
       - name: Build Docker Image
-        run: docker build -t ghcr.io/${{ github.repository }}:latest .
+        run: |
+          docker build \
+              -t ghcr.io/${{ github.repository }}:latest \
+              -t ghcr.io/${{ github.repository }}:${{ github.sha }} .
 
       - name: Push Docker Image to GHCR
-        run: docker push ghcr.io/${{ github.repository }}:latest
+        run: |
+          docker push ghcr.io/${{ github.repository }}:latest
+          docker push ghcr.io/${{ github.repository }}:${{ github.sha }}
