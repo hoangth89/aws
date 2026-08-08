@@ -1,10 +1,10 @@
 const repository = require("../repositories/products.repository");
 const s3Service = require("./s3.service");
-const redisClient = require("../config/redis");
+const redis = require("../services/redis.service");
 
 async function getProducts() {
 
-    const cachedProducts = await redisClient.get("products");
+    const cachedProducts = await redis.get("products");
 
     if (cachedProducts) {
         return {
@@ -53,11 +53,8 @@ async function updateProduct(id, data, file) {
     let imageUrl = null;
 
     if (file) {
-
         const uploaded = await s3Service.uploadFile(file);
-
         imageUrl = uploaded.url;
-
     }
 
     await redisClient.del("products");
