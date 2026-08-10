@@ -45,28 +45,28 @@ jobs:
           docker push ghcr.io/${{ github.repository }}:latest
           docker push ghcr.io/${{ github.repository }}:${{ github.sha }}
 
-    deploy:
-      needs: build
-      runs-on: ubuntu-latest
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
 
-      steps:
-        - name: Deploy to EC2
-          uses: appleboy/ssh-action@v1
-          with:
-            host: ${{ secrets.EC2_HOST }}
-            username: ${{ secrets.EC2_USERNAME }}
-            key: ${{ secrets.EC2_SSH_KEY }}
-            script: |
-              IMAGE="ghcr.io/${{ github.repository }}:${{ github.sha }}"
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            IMAGE="ghcr.io/${{ github.repository }}:${{ github.sha }}"
 
-              docker pull $IMAGE
+            docker pull $IMAGE
 
-              docker stop hello-learning-aws || true
-              docker rm hello-learning-aws || true
+            docker stop hello-learning-aws || true
+            docker rm hello-learning-aws || true
 
-              docker run -d \
-                --name hello-learning-aws \
-                -p 3000:3000 \
-                ghcr.io/${{ github.repository }}:latest
+            docker run -d \
+              --name hello-learning-aws \
+              -p 3000:3000 \
+              ghcr.io/${{ github.repository }}:latest
 
-              docker ps
+            docker ps
