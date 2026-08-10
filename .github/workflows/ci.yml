@@ -59,7 +59,7 @@ jobs:
           script: |
             IMAGE="ghcr.io/${{ github.repository }}:${{ github.sha }}"
 
-            docker pull $IMAGE
+            docker pull "$IMAGE"
 
             docker stop hello-learning-aws || true
             docker rm hello-learning-aws || true
@@ -67,6 +67,6 @@ jobs:
             docker run -d \
               --name hello-learning-aws \
               -p 3000:3000 \
-              ghcr.io/${{ github.repository }}:$IMAGE
+              "$IMAGE"
 
             docker ps
