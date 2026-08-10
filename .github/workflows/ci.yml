@@ -67,6 +67,6 @@ jobs:
             docker run -d \
               --name hello-learning-aws \
               -p 3000:3000 \
-              ghcr.io/${{ github.repository }}:latest
+              ghcr.io/${{ github.repository }}:$IMAGE
 
             docker ps
