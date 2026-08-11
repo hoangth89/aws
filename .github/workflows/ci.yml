@@ -60,3 +60,32 @@ jobs:
         run: |
           docker push ${{ steps.login-ecr.outputs.registry }}/learning-aws:${{ github.sha }}
           docker push ${{ steps.login-ecr.outputs.registry }}/learning-aws:latest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1
+        with:
+          script: |
+            IMAGE="IMAGE="749203477175.dkr.ecr.ap-southeast-2.amazonaws.com/learning-aws:${{ github.sha }}"
+
+            aws ecr get-login-password --region ap-southeast-2 | \
+              docker login \
+                --username AWS \
+                --password-stdin \
+                749203477175.dkr.ecr.ap-southeast-2.amazonaws.com
+
+            docker pull "$IMAGE"
+
+            docker stop hello-learning-aws || true
+            docker rm hello-learning-aws || true
+
+            docker run -d \
+              --name hello-learning-aws \
+              -p 3000:3000 \
+              "$IMAGE"
+
+            docker ps
