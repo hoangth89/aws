@@ -69,6 +69,9 @@ jobs:
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1
         with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             IMAGE="749203477175.dkr.ecr.ap-southeast-2.amazonaws.com/learning-aws:${{ github.sha }}"
 
