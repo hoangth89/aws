@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write
   packages: write
 
 jobs:
@@ -25,7 +26,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
+     
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -44,6 +45,31 @@ jobs:
         run: |
           docker push ghcr.io/${{ github.repository }}:latest
           docker push ghcr.io/${{ github.repository }}:${{ github.sha }}
+      
+       # 1. GitHub OIDC → AWS IAM Role
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::749203477175:role/GitHubActionsECRRole
+          aws-region: ap-southeast-2
+
+      # 2. AWS ECR Login
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      # 3. Build image
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t ${{ steps.login-ecr.outputs.registry }}/learning-aws:${{ github.sha }} \
+            -t ${{ steps.login-ecr.outputs.registry }}/learning-aws:latest .
+      
+       # 4. Push image
+      - name: Push Docker image
+        run: |
+          docker push ${{ steps.login-ecr.outputs.registry }}/learning-aws:${{ github.sha }}
+          docker push ${{ steps.login-ecr.outputs.registry }}/learning-aws:latest
 
   deploy:
     needs: build
