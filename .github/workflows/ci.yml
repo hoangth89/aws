@@ -70,7 +70,7 @@ jobs:
         uses: appleboy/ssh-action@v1
         with:
           script: |
-            IMAGE="IMAGE="749203477175.dkr.ecr.ap-southeast-2.amazonaws.com/learning-aws:${{ github.sha }}"
+            IMAGE="749203477175.dkr.ecr.ap-southeast-2.amazonaws.com/learning-aws:${{ github.sha }}"
 
             aws ecr get-login-password --region ap-southeast-2 | \
               docker login \
