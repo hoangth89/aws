@@ -26,6 +26,12 @@ jobs:
       - name: Install packages
         run: npm install
 
+      - name: Debug GitHub context
+        run: |
+          echo "Repository: ${{ github.repository }}"
+          echo "Ref: ${{ github.ref }}"
+          echo "Ref name: ${{ github.ref_name }}"
+
       # GitHub OIDC → AWS IAM Role
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
