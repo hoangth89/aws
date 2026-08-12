@@ -17,6 +17,9 @@ const errorHandler =
 app.use("/users", usersRoutes);
 app.use("/products", productsRoutes);
 app.use("/auth", authRoutes);
+app.use("/health", (req, res) => {
+    res.status(200).json({ status: "ok" });
+});
 
 setTimeout(async () => {
     try {
