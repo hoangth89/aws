@@ -21,6 +21,22 @@ app.use("/health", (req, res) => {
     res.status(200).json({ status: "ok" });
 });
 
+app.get('/cpu', async (req, res) => {
+  const duration = Math.min(Number(req.query.seconds) || 10, 30);
+
+  const end = Date.now() + duration * 1000;
+
+  while (Date.now() < end) {
+    Math.sqrt(Math.random() * 1000000);
+  }
+
+  res.json({
+    message: 'CPU load test completed',
+    duration: `${duration}s`,
+    timestamp: new Date().toISOString()
+  });
+});
+
 setTimeout(async () => {
     try {
         await initDatabase();
