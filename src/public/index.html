@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <title>Home</title>
+        <script type="text/javascript">
+            console.log("Hello world!");
+            
+
+            async function bindData() {
+                const res = await fetch("/instanceId");
+                const data = await res.json();
+                document.getElementById("randomId").innerHTML = data.instanceId;
+            }
+
+            bindData();
+
+        </script>
+    </head>
+    <body>
+        <h1>Home AWS Study</h1>
+        <span>This page is used for studying aws</span>
+        <span>Random ID: <span id="randomId"></span></span>
+    </body>
+</html>

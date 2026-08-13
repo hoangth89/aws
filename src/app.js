@@ -21,8 +21,17 @@ app.use("/health", (req, res) => {
     res.status(200).json({ status: "ok" });
 });
 
+const instanceRandomId = Math.floor(Math.random() * 1000000);
+app.get("/instanceId", (req, res) => {
+    res.json({ instanceId: instanceRandomId });
+}); 
+
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/public/index.html');
+});
+
 app.get('/cpu', async (req, res) => {
-  const duration = Math.min(Number(req.query.seconds) || 10, 30);
+  const duration = Math.min(Number(req.query.seconds) || 10, 30, 600);
 
   const end = Date.now() + duration * 1000;
 
