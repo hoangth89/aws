@@ -26,6 +26,41 @@ app.get("/instanceId", (req, res) => {
     res.json({ instanceId: instanceRandomId });
 }); 
 
+app.get('/app-info', (req, res) => {
+    const appInfo = {
+        name: 'AWS Node.js App',
+        version: '1.0.0',
+        description: 'A Node.js application running on AWS',
+        environment: process.env.NODE_ENV || 'development',
+        timestamp: new Date().toISOString()
+    }
+
+   res.set('cache-control', 'public, max-age=3600'); // Cache for 1 hour
+   return res.status(200).json(appInfo);
+});
+
+app.get('/cached-random-number', (req, res) => {
+    const randomNumber = Math.floor(Math.random() * 1000000);
+    const timeStamp = new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+
+    res.set('cache-control', 'public, max-age=360'); // Cache for 6 minutes
+    res.json({ 
+        timeStamp,
+        randomNumber 
+    });
+}); 
+
+app.get('/refresh-random-number', (req, res) => {
+    const randomNumber = Math.floor(Math.random() * 1000000);
+    const timeStamp = new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+
+    res.set('cache-control', 'no-store'); // no-cache
+    res.json({ 
+        timeStamp, 
+        randomNumber 
+    });
+});
+
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
