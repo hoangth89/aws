@@ -50,7 +50,7 @@ app.get('/cached-random-number', (req, res) => {
     });
 }); 
 
-app.get('/refresh-random-number', (req, res) => {
+app.get('/fresh-random-number', (req, res) => {
     const randomNumber = Math.floor(Math.random() * 1000000);
     const timeStamp = new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
 
