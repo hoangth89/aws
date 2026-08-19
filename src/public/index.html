@@ -39,6 +39,10 @@
         <div>---------------------------------------------------</div>
 
 
+        <div style="margin-top:20px">---------------------------------------------------</div>
+        <button id="cognitoUserInfoBtn">Cognito User Info</button>
+        <div id="cognitoUserInfo"></div>
+
 
          <script>
          const searchWithAuthBtn = document.getElementById("searchWithAuthBtn");
@@ -78,6 +82,23 @@
                     <div>Sub: ${payload.sub}</div>
                 `;
             }
+
+            cognitoUserInfoBtn.addEventListener("click", async () => {
+                const res = await fetch("https://api.aws.dict.io.vn/me", {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("access_token")}`
+                    }
+                });
+                const data = await res.json();
+                console.log(data);
+
+                const cognitoUserInfoDiv = document.getElementById("cognitoUserInfo");
+                cognitoUserInfoDiv.innerHTML = `
+                    <div>Name: ${data.name}</div>
+                    <div>Email: ${data.email}</div>
+                    <div>Sub: ${data.sub}</div>
+                `;
+            });
     </script>
     </body>
 
