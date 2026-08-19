@@ -1,106 +1,137 @@
 <html>
-    <head>
-        <title>Home</title>
-        <script type="text/javascript">
-            console.log("Hello world!");
-            
 
-            async function bindData() {
-                const res = await fetch("/instanceId");
-                const data = await res.json();
-                document.getElementById("randomId").innerHTML = data.instanceId;
+<head>
+    <title>Home</title>
+    <script type="text/javascript">
+        console.log("Hello world!");
+
+
+        async function bindData() {
+            const res = await fetch("/instanceId");
+            const data = await res.json();
+            document.getElementById("randomId").innerHTML = data.instanceId;
+        }
+
+        bindData();
+
+    </script>
+
+    <script type="importmap">
+            {
+                "imports": {
+                    "oidc-client-ts": "https://cdn.jsdelivr.net/npm/oidc-client-ts@3.5.0/dist/esm/oidc-client-ts.js",
+                    "jwt-decode": "https://cdn.jsdelivr.net/npm/jwt-decode@4.0.0/build/esm/index.js"
+                }
+            }
+        </script>
+
+</head>
+
+<body>
+    <h1>Home AWS Study</h1>
+    <span>This page is used for studying aws</span>
+    <span>Random ID: <span id="randomId"></span></span>
+
+    <div style="margin-top:20px">---------------------------------------------------</div>
+    <div>Test Search API</div>
+    <div>---------------------------------------------------</div>
+    <button id="searchWithAuthBtn">Test Search with Authorization</button>
+
+    <div>---------------------------------------------------</div>
+    <div>Test Search API without Authorization</div>
+    <div>---------------------------------------------------</div>
+    <button id="searchWithoutAuthBtn">Test Search without Authorization</button>
+
+
+    <div style="margin-top:20px">---------------------------------------------------</div>
+    <div>User Info:</div>
+    <div id="userInfo">---------------------------------------------------</div>
+    <div>---------------------------------------------------</div>
+
+
+    <div style="margin-top:20px">---------------------------------------------------</div>
+    <button id="cognitoUserInfoBtn">Cognito User Info</button>
+    <div id="cognitoUserInfo"></div>
+
+
+    <div>---------------------------------------------------</div>
+    <button id="signInBtn">Sign In</button>
+    <button id="signOutBtn">Sign Out</button>
+    <div>---------------------------------------------------</div>
+
+
+    <script>
+        const searchWithAuthBtn = document.getElementById("searchWithAuthBtn");
+        searchWithAuthBtn.addEventListener("click", async () => {
+            const accessToken = localStorage.getItem("access_token");
+            if (!accessToken) {
+                console.error("Access token not found in localStorage.");
+                return;
             }
 
-            bindData();
-
-           
-
-        </script>
-    </head>
-    <body>
-        <h1>Home AWS Study</h1>
-        <span>This page is used for studying aws</span>
-        <span>Random ID: <span id="randomId"></span></span>
-
-        <div style="margin-top:20px">---------------------------------------------------</div>
-        <div>Test Search API</div>
-        <div>---------------------------------------------------</div>
-        <button id="searchWithAuthBtn">Test Search with Authorization</button>
-
-        <div>---------------------------------------------------</div>
-        <div>Test Search API without Authorization</div>
-        <div>---------------------------------------------------</div>
-        <button id="searchWithoutAuthBtn">Test Search without Authorization</button>
-
-
-        <div style="margin-top:20px">---------------------------------------------------</div>
-        <div>User Info:</div>
-        <div id="userInfo">---------------------------------------------------</div>
-        <div>---------------------------------------------------</div>
-
-
-        <div style="margin-top:20px">---------------------------------------------------</div>
-        <button id="cognitoUserInfoBtn">Cognito User Info</button>
-        <div id="cognitoUserInfo"></div>
-
-
-         <script>
-         const searchWithAuthBtn = document.getElementById("searchWithAuthBtn");
-            searchWithAuthBtn.addEventListener("click", async () => {
-                const accessToken = localStorage.getItem("access_token");
-                if (!accessToken) {
-                    console.error("Access token not found in localStorage.");
-                    return;
+            const res = await fetch("https://api.aws.dict.io.vn/search?q=he", {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
                 }
-
-                const res = await fetch("https://api.aws.dict.io.vn/search?q=he", {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`
-                    }
-                });
-
-                const data = await res.json();
-                console.log(data);
             });
 
-            const searchWithoutAuthBtn = document.getElementById("searchWithoutAuthBtn");
-            searchWithoutAuthBtn.addEventListener("click", async () => {
-                const res = await fetch("https://api.aws.dict.io.vn/search?q=he");
-                const data = await res.json();
-                console.log(data);
-            });
+            const data = await res.json();
+            console.log(data);
+        });
+
+        const searchWithoutAuthBtn = document.getElementById("searchWithoutAuthBtn");
+        searchWithoutAuthBtn.addEventListener("click", async () => {
+            const res = await fetch("https://api.aws.dict.io.vn/search?q=he");
+            const data = await res.json();
+            console.log(data);
+        });
 
 
-            const userInfoDiv = document.getElementById("userInfo");
-            const tokenId = localStorage.getItem("id_token");
+        const userInfoDiv = document.getElementById("userInfo");
+        const tokenId = localStorage.getItem("id_token");
 
-            if (tokenId) {
-                const payload = JSON.parse(atob(tokenId.split('.')[1]));
-                userInfoDiv.innerHTML = `
+        if (tokenId) {
+            const payload = JSON.parse(atob(tokenId.split('.')[1]));
+            userInfoDiv.innerHTML = `
                     <div>Name: ${payload.name}</div>
                     <div>Email: ${payload.email}</div>
                     <div>Sub: ${payload.sub}</div>
                 `;
-            }
+        }
 
-            cognitoUserInfoBtn.addEventListener("click", async () => {
-                const res = await fetch("https://api.aws.dict.io.vn/me", {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("access_token")}`
-                    }
-                });
-                const data = await res.json();
-                console.log(data);
+        cognitoUserInfoBtn.addEventListener("click", async () => {
+            const res = await fetch("https://api.aws.dict.io.vn/me", {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("access_token")}`
+                }
+            });
+            const data = await res.json();
+            console.log(data);
 
-                const cognitoUserInfoDiv = document.getElementById("cognitoUserInfo");
-                cognitoUserInfoDiv.innerHTML = `
+            const cognitoUserInfoDiv = document.getElementById("cognitoUserInfo");
+            cognitoUserInfoDiv.innerHTML = `
                     <div>Name: ${data.name}</div>
                     <div>Email: ${data.email}</div>
                     <div>Sub: ${data.sub}</div>
                 `;
-            });
-    </script>
-    </body>
+        });
 
-   
+        signInBtn.addEventListener("click", () => {
+            window.location.href = "/signin.html";
+        });
+    </script>
+    <script type="module">
+        import { userManager } from "./main.js";
+
+        document.getElementById("signOutBtn").addEventListener("click", async () => {
+            await userManager.signoutRedirect();
+        });
+
+        document.getElementById("signInBtn").addEventListener("click", async () => {
+            await userManager.signinRedirect();
+        });
+    </script>
+</body>
+
+
 </html>
