@@ -33,6 +33,12 @@
         <button id="searchWithoutAuthBtn">Test Search without Authorization</button>
 
 
+        <div style="margin-top:20px">---------------------------------------------------</div>
+        <div>User Info:</div>
+        <div id="userInfo">---------------------------------------------------</div>
+        <div>---------------------------------------------------</div>
+
+
 
          <script>
          const searchWithAuthBtn = document.getElementById("searchWithAuthBtn");
@@ -59,6 +65,19 @@
                 const data = await res.json();
                 console.log(data);
             });
+
+
+            const userInfoDiv = document.getElementById("userInfo");
+            const tokenId = localStorage.getItem("id_token");
+
+            if (tokenId) {
+                const payload = JSON.parse(atob(tokenId.split('.')[1]));
+                userInfoDiv.innerHTML = `
+                    <div>Name: ${payload.name}</div>
+                    <div>Email: ${payload.email}</div>
+                    <div>Sub: ${payload.sub}</div>
+                `;
+            }
     </script>
     </body>
 
