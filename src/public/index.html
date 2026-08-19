@@ -13,7 +13,29 @@
 
             bindData();
 
-            const searchWithAuthBtn = document.getElementById("searchWithAuthBtn");
+           
+
+        </script>
+    </head>
+    <body>
+        <h1>Home AWS Study</h1>
+        <span>This page is used for studying aws</span>
+        <span>Random ID: <span id="randomId"></span></span>
+
+        <div style="margin-top:20px">---------------------------------------------------</div>
+        <div>Test Search API</div>
+        <div>---------------------------------------------------</div>
+        <button id="searchWithAuthBtn">Test Search with Authorization</button>
+
+        <div>---------------------------------------------------</div>
+        <div>Test Search API without Authorization</div>
+        <div>---------------------------------------------------</div>
+        <button id="searchWithoutAuthBtn">Test Search without Authorization</button>
+
+
+
+         <script>
+         const searchWithAuthBtn = document.getElementById("searchWithAuthBtn");
             searchWithAuthBtn.addEventListener("click", async () => {
                 const accessToken = localStorage.getItem("access_token");
                 if (!accessToken) {
@@ -37,22 +59,8 @@
                 const data = await res.json();
                 console.log(data);
             });
-
-        </script>
-    </head>
-    <body>
-        <h1>Home AWS Study</h1>
-        <span>This page is used for studying aws</span>
-        <span>Random ID: <span id="randomId"></span></span>
-
-        <div>---------------------------------------------------</div>
-        <div>Test Search API</div>
-        <div>---------------------------------------------------</div>
-        <button id="searchWithAuthBtn">Test Search with Authorization</button>
-
-        <div>---------------------------------------------------</div>
-        <div>Test Search API without Authorization</div>
-        <div>---------------------------------------------------</div>
-        <button id="searchWithoutAuthBtn">Test Search without Authorization</button>
+    </script>
     </body>
+
+   
 </html>
