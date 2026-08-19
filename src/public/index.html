@@ -55,7 +55,7 @@
 
             const searchWithoutAuthBtn = document.getElementById("searchWithoutAuthBtn");
             searchWithoutAuthBtn.addEventListener("click", async () => {
-                const res = await fetch("/searchWithoutAuth");
+                const res = await fetch("https://api.aws.dict.io.vn/search?q=he");
                 const data = await res.json();
                 console.log(data);
             });
