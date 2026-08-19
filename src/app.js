@@ -65,6 +65,18 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
 
+app.get('/signin', (req, res) => {
+    res.sendFile(__dirname + '/public/signin.html');
+});
+
+app.get('/main.js', (req, res) => {
+    res.sendFile(__dirname + '/public/main.js');
+});
+
+app.get('/redirect', (req, res) => {
+    res.sendFile(__dirname + '/public/redirect.html');
+});
+
 app.get('/cpu', async (req, res) => {
   const duration = Math.min(Number(req.query.seconds) || 10, 30, 600);
 
