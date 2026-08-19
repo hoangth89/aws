@@ -22,5 +22,9 @@
         document.getElementById("access-token").textContent = user.access_token;
         document.getElementById("id-token").textContent = user.id_token;
         document.getElementById("refresh-token").textContent = user.refresh_token;
+
+        localStorage.setItem("access_token", user.access_token);
+        localStorage.setItem("id_token", user.id_token);
+        localStorage.setItem("refresh_token", user.refresh_token);
     });
 </script>

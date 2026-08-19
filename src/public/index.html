@@ -13,11 +13,46 @@
 
             bindData();
 
+            const searchWithAuthBtn = document.getElementById("searchWithAuthBtn");
+            searchWithAuthBtn.addEventListener("click", async () => {
+                const accessToken = localStorage.getItem("access_token");
+                if (!accessToken) {
+                    console.error("Access token not found in localStorage.");
+                    return;
+                }
+
+                const res = await fetch("https://api.aws.dict.io.vn/search?q=he", {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    }
+                });
+
+                const data = await res.json();
+                console.log(data);
+            });
+
+            const searchWithoutAuthBtn = document.getElementById("searchWithoutAuthBtn");
+            searchWithoutAuthBtn.addEventListener("click", async () => {
+                const res = await fetch("/searchWithoutAuth");
+                const data = await res.json();
+                console.log(data);
+            });
+
         </script>
     </head>
     <body>
         <h1>Home AWS Study</h1>
         <span>This page is used for studying aws</span>
         <span>Random ID: <span id="randomId"></span></span>
+
+        <span>---------------------------------------------------</span>
+        <span>Test Search API</span>
+        <span>---------------------------------------------------</span>
+        <button id="searchWithAuthBtn">Test Search with Authorization</button>
+
+        <span>---------------------------------------------------</span>
+        <span>Test Search API without Authorization</span>
+        <span>---------------------------------------------------</span>
+        <button id="searchWithoutAuthBtn">Test Search without Authorization</button>
     </body>
 </html>
