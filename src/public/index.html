@@ -59,6 +59,13 @@
     <button id="signOutBtn">Sign Out</button>
     <div>---------------------------------------------------</div>
 
+    <div>---------------------------------------------------</div>
+    <form id="s3Form" action = "/s3file" method="post">
+        <h3>Upload file to S3</h3>
+        <input type="file" name="s3file" />
+        <button type="submit">Upload</button>
+    </form>
+
 
     <script>
         const searchWithAuthBtn = document.getElementById("searchWithAuthBtn");
@@ -114,6 +121,34 @@
                     <div>Email: ${data.email}</div>
                     <div>Sub: ${data.sub}</div>
                 `;
+        });
+
+        const s3Form = document.getElementById("s3Form");
+        s3Form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const fileInput = s3Form.querySelector('input[type="file"]');
+            const fileName = fileInput.files[0].name;
+
+
+            const accessToken = localStorage.getItem("access_token");
+            if (!accessToken) {
+                console.error("Access token not found in localStorage.");
+                return;
+            }
+
+            const res = await fetch("https://api.aws.dict.io.vn/s3file", {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                body: {
+                    fileName: fileName,
+                }
+            });
+
+            const data = await res.json();
+            console.log(data);
         });
 
     </script>
